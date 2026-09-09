@@ -1,4 +1,4 @@
-```bash
+
 #!/bin/bash
 
 set -euxo pipefail
@@ -84,4 +84,4 @@ echo "Docker installed successfully"
 echo "Kind installed successfully"
 echo "kubectl installed successfully"
 echo "========================================"
-```
+
