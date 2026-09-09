@@ -37,7 +37,7 @@ module "sandbox_host" {
   associate_public_ip_address = true
 
   iam_instance_profile = aws_iam_instance_profile.sandbox_profile.name
-  user_data            = file("${path.module}/bootstrap_sandbox.sh")
+  user_data_base64     = filebase64("${path.module}/bootstrap_sandbox.sh")
 
 }
 

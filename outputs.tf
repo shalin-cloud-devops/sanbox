@@ -4,6 +4,6 @@ output "vpc_id" {
 }
 
 output "Instace_id" {
-  value = module.sandbox_host_id
+  value = module.sandbox_host.id
 
 }

@@ -5,13 +5,6 @@ resource "aws_ssm_parameter" "vpc_id" {
 
 }
 
-resource "aws_ssm_parameter" "private_subnets" {
-  name  = "/mutual_fund_sandbox/private_subnets"
-  type  = "StringList"
-  value = join(",", module.vpc.private_subnets)
-
-}
-
 resource "aws_ssm_parameter" "public_subnets" {
   name  = "/mutual_fund_sandbox/public_subnets"
   type  = "StringList"
