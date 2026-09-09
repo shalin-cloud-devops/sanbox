@@ -3,8 +3,12 @@ name: "VPC CI"
 on:
     push:
         paths:
-            - "sanbox/sandbox.tf"
+            - "sandbox.tf"
     workflow_dispatch:
+
+concurrency:
+    group: terraform-sandbox
+    cancel-in-progress: false
 
 permissions:
     id-token: write
@@ -17,7 +21,7 @@ jobs:
 
         defaults:
             run:
-                working-directory: ./sanbox
+                working-directory: .
 
         env:
             AWS_REGION: "us-east-1"
@@ -58,7 +62,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: tfplan
-                  path: ./sanbox/tfplan
+                  path: tfplan
                   retention-days: 1
 
     terraform-apply:
@@ -71,10 +75,10 @@ jobs:
 
         defaults:
             run:
-                working-directory: ./sanbox
+                working-directory: . # Fixed: Now correctly points to the root directory
 
         env:
-            AWS_REGION: "us-east-1" # Telling github actions to use us-east-1
+            AWS_REGION: "us-east-1"
             TF_LOG: INFO
 
         steps:
@@ -85,7 +89,6 @@ jobs:
               uses: aws-actions/configure-aws-credentials@v4
               with:
                   role-to-assume: arn:aws:iam::514005485562:role/GitHubActionsTerraformRole
-                  # This role must be already created
                   aws-region: ${{ env.AWS_REGION }}
 
             - name: "Setup Terraform"
@@ -96,8 +99,8 @@ jobs:
             - name: "Download Terraform Plan"
               uses: actions/download-artifact@v4
               with:
-                  name: tfplan
-                  path: ./sanbox/
+                  name: tfplan # Fixed: Matches the 'name' from the upload step
+                  path: . # Fixed: Drops the file at the root directory
 
             - name: "Terraform init"
               id: init
